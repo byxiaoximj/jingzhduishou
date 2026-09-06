@@ -15105,7 +15105,7 @@ function module.create_window(args)
         Center = args.center,
         AutoShow = ui_settings.auto_show == true,
         DisableSearch = true,
-        Footer = args.footer or 'XK',
+        Footer = args.footer or '竞争对手',
         Icon = args.icon,
         IconSize = args.icon_size,
     })
