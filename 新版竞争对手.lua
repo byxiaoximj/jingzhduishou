@@ -60465,7 +60465,7 @@ return je.c
 end
 end
 do -- jf
-local function fn35()local I,W= tbl17 .bG(), tbl17 .aE(); tbl17 .hN();local N,P,a,e,c,E,p,T= tbl17 .h_(), tbl17 .ij(), tbl17 .ip(), tbl17 .n(), tbl17 .iw(), tbl17 .i_(), tbl17 .je(),cloneref(game:GetService("Players")).LocalPlayer;return function(l)if getgenv().KhForceMobileUi==true then W.ForceMobileLayout();end;local t=W.Menu.new({Icon=K.LithiumLogo,Title=string.format("XIAOXISCRIPT V3| 竞争对手 | %s",tostring("付费版")),Directory="XIAOXIscriptrivals/竞争对手",Config=l.ReactiveStoreAdapter,ColorAnimation=l.ColorAnimation,Persistence=I,State=l.GeneralState,StateData=l.GeneralStateData,OnUnload=function()e:Destroy();end});e:Add(t);local I=l.PlayerIdentities;t:SetWatermarkUsername(I:GetPresented(T));e:Connect(I.IdentityChanged,function(W)if W==T then t:SetWatermarkUsername(I:GetPresented(T));end;end);P(l,t);E(l,t);c(l,t);N(l,t);p(l,t);a(l,t);t:AddSettingsTab();t:SetVisible(not(l.GeneralStateData.SilentLoad==true),true);end;end
+local function fn35()local I,W= tbl17 .bG(), tbl17 .aE(); tbl17 .hN();local N,P,a,e,c,E,p,T= tbl17 .h_(), tbl17 .ij(), tbl17 .ip(), tbl17 .n(), tbl17 .iw(), tbl17 .i_(), tbl17 .je(),cloneref(game:GetService("Players")).LocalPlayer;return function(l)if getgenv().KhForceMobileUi==true then W.ForceMobileLayout();end;local t=W.Menu.new({Icon=K.LithiumLogo,Title=string.format("XIAOXISCRIPT V3.1| 竞争对手 | %s",tostring("付费版")),Directory="XIAOXIscriptrivals/竞争对手",Config=l.ReactiveStoreAdapter,ColorAnimation=l.ColorAnimation,Persistence=I,State=l.GeneralState,StateData=l.GeneralStateData,OnUnload=function()e:Destroy();end});e:Add(t);local I=l.PlayerIdentities;t:SetWatermarkUsername(I:GetPresented(T));e:Connect(I.IdentityChanged,function(W)if W==T then t:SetWatermarkUsername(I:GetPresented(T));end;end);P(l,t);E(l,t);c(l,t);N(l,t);p(l,t);a(l,t);t:AddSettingsTab();t:SetVisible(not(l.GeneralStateData.SilentLoad==true),true);end;end
 
 tbl17.jf = function()
 local jf = tbl17.cache.jf
@@ -66586,10 +66586,22 @@ task.defer(function()
 
     -- 传送自动重载（填了 URL 才启用）
     if XIAOXI_AUTOLOAD_URL ~= "" then
-        pcall(function()
-            local q = queue_on_teleport or (typeof(syn) == "table" and syn.queue_on_teleport) or (typeof(fluxus) == "table" and fluxus.queue_on_teleport)
-            if q then
-                q('loadstring(game:HttpGet("' .. XIAOXI_AUTOLOAD_URL .. '"))()')
+        task.spawn(function()
+            local q = queue_on_teleport
+                or queueteleport
+                or queueonteleport
+                or (typeof(syn) == "table" and syn.queue_on_teleport)
+                or (typeof(fluxus) == "table" and fluxus.queue_on_teleport)
+                or (typeof(Delta) == "table" and Delta.queue_on_teleport)
+            if type(q) ~= "function" then
+                warn("[XIAOXISCRIPT] 当前执行器不支持 queue_on_teleport，传送后不会自动加载")
+                return
+            end
+            local ok, err = pcall(q, 'task.wait(10) loadstring(game:HttpGet("' .. XIAOXI_AUTOLOAD_URL .. '"))()')
+            if ok then
+                print("[XIAOXISCRIPT] 已登记传送自动重载")
+            else
+                warn("[XIAOXISCRIPT] 自动重载登记失败: " .. tostring(err))
             end
         end)
     end
